@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0f0f0f;
+  color: white;
+  font-family: 'Montserrat', sans-serif;
+  overflow-x: hidden;
+  text-align: center;
+}
+
+section {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 1.2s ease;
+}
+
+section.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 1.2rem;
+  max-width: 600px;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+button {
+  padding: 12px 30px;
+  font-size: 1rem;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  margin: 10px;
+  transition: 0.3s;
+}
+
+.primary {
+  background: white;
+  color: black;
+}
+
+.primary:hover {
+  transform: scale(1.05);
+}
+
+.secondary {
+  background: transparent;
+  color: white;
+  border: 1px solid white;
+  position: relative;
+}
+
+.final-message {
+  font-size: 2rem;
+  font-family: 'Playfair Display', serif;
+}
+</style>
+</head>
+
+<body>
+
+<section class="show">
+  <h1>Hi.</h1>
+  <p>I could’ve just sent a text.</p>
+  <button class="primary" onclick="nextSection()">Keep going</button>
+</section>
+
+<section>
+  <p>But that felt ordinary.</p>
+</section>
+
+<section>
+  <p>You don’t feel ordinary.</p>
+</section>
+
+<section>
+  <p>So I built something instead.</p>
+</section>
+
+<section>
+  <h1>February 14th.</h1>
+  <p>There’s only one question that matters.</p>
+  <button class="primary" onclick="showQuestion()">Continue</button>
+</section>
+
+<section id="questionSection" style="display:none;">
+  <h1>Will you be my Valentine?</h1>
+  <div>
+    <button class="primary" onclick="sayYes()">Yes</button>
+    <button class="secondary" onmouseover="moveButton(this)">No</button>
+  </div>
+</section>
+
+<section id="yesSection" style="display:none;">
+  <div class="final-message">
+    I’ll pick you up at 7.<br><br>
+    Dress nice.
+  </div>
+</section>
+
+<script>
+let current = 0;
+const sections = document.querySelectorAll("section");
+
+function nextSection() {
+  if (current < sections.length - 1) {
+    sections[current].classList.remove("show");
+    current++;
+    sections[current].classList.add("show");
+  }
+}
+
+function showQuestion() {
+  sections[current].style.display = "none";
+  document.getElementById("questionSection").style.display = "flex";
+  document.getElementById("questionSection").classList.add("show");
+}
+
+function sayYes() {
+  document.getElementById("questionSection").style.display = "none";
+  document.getElementById("yesSection").style.display = "flex";
+  document.getElementById("yesSection").classList.add("show");
+}
+
+function moveButton(button) {
+  button.style.position = "absolute";
+  button.style.top = Math.random() * window.innerHeight + "px";
+  button.style.left = Math.random() * window.innerWidth + "px";
+}
+</script>
+
+</body>
+</html>
