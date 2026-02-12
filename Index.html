@@ -1,42 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For You</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  background: #0f0f0f;
+  background: #111;
   color: white;
   font-family: 'Montserrat', sans-serif;
-  overflow-x: hidden;
-  text-align: center;
+  overflow: hidden;
 }
 
 section {
   height: 100vh;
-  display: flex;
+  display: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
   padding: 20px;
-  opacity: 0;
-  transform: translateY(40px);
-  transition: all 1.2s ease;
+  transition: opacity 1s ease;
 }
 
-section.show {
-  opacity: 1;
-  transform: translateY(0);
+section.active {
+  display: flex;
 }
 
 h1 {
@@ -48,27 +41,22 @@ h1 {
 p {
   font-size: 1.2rem;
   max-width: 600px;
-  line-height: 1.6;
   margin-bottom: 30px;
 }
 
 button {
-  padding: 12px 30px;
+  padding: 14px 32px;
   font-size: 1rem;
   border-radius: 30px;
   border: none;
   cursor: pointer;
   margin: 10px;
-  transition: 0.3s;
+  transition: all 0.3s ease;
 }
 
 .primary {
   background: white;
   color: black;
-}
-
-.primary:hover {
-  transform: scale(1.05);
 }
 
 .secondary {
@@ -77,53 +65,43 @@ button {
   border: 1px solid white;
   position: relative;
 }
-
-.final-message {
-  font-size: 2rem;
-  font-family: 'Playfair Display', serif;
-}
 </style>
 </head>
 
 <body>
 
-<section class="show">
-  <h1>Heya.</h1>
+<!-- Intro Sections -->
+
+<section class="active">
+  <h1>HEYA! ABEA! (see what I did there.)</h1>
   <p>I could’ve just sent a text.</p>
   <button class="primary" onclick="nextSection()">Keep going</button>
 </section>
 
 <section>
-  <p>Well I KNOW i couldn't but that definetly wouldve been ordinary.</p>
+  <p>(well I KNOW I couldn't) But that felt ordinary and you are not ordinary.</p>
+  <button class="primary" onclick="nextSection()">Continue</button>
 </section>
 
 <section>
-  <p>You Aren't ordinary.</p>
+  <p>You are special.</p>
+  <button class="primary" onclick="nextSection()">Continue</button>
 </section>
 
 <section>
-  <p>So I built something just as special as you.</p>
+  <p>So I built something just as Special instead.</p>
+  <button class="primary" onclick="nextSection()">One more thing</button>
 </section>
 
-<section>
-  <h1>February 14th.(February 11)</h1>
-  <p>There’s only one question that matters.</p>
-  <button class="primary" onclick="showQuestion()">Continue</button>
-</section>
-
-<section id="questionSection" style="display:none;">
+<section id="questionSection">
   <h1>Will you be my Valentine?</h1>
-  <div>
-    <button class="primary" onclick="sayYes()">Yes</button>
-    <button class="secondary" onmouseover="moveButton(this)">No</button>
-  </div>
+  <button class="primary" id="yesBtn" onclick="sayYes()">Yes</button>
+  <button class="secondary" id="noBtn" onclick="handleNo()">No</button>
 </section>
 
-<section id="yesSection" style="display:none;">
-  <div class="final-message">
-    Come ready.<br><br>
-   Come steady...
-  </div>
+<section id="yesSection">
+  <h1>I knew you would ❤️</h1>
+  <p>WOO! WOO!</p>
 </section>
 
 <script>
@@ -131,29 +109,45 @@ let current = 0;
 const sections = document.querySelectorAll("section");
 
 function nextSection() {
-  if (current < sections.length - 1) {
-    sections[current].classList.remove("show");
-    current++;
-    sections[current].classList.add("show");
-  }
+  sections[current].classList.remove("active");
+  current++;
+  sections[current].classList.add("active");
 }
 
-function showQuestion() {
-  sections[current].style.display = "none";
-  document.getElementById("questionSection").style.display = "flex";
-  document.getElementById("questionSection").classList.add("show");
+let noClicks = 0;
+
+const messages = [
+  "Are you sure?",
+  "Really sure?",
+  "Think again.",
+  "AH AH KILODE",
+  "You're playing.",
+  "Be serious.",
+  "You know you want to press yes."
+];
+
+function handleNo() {
+  const noBtn = document.getElementById("noBtn");
+  const yesBtn = document.getElementById("yesBtn");
+
+  if (noClicks < messages.length) {
+    noBtn.innerText = messages[noClicks];
+  } else {
+    noBtn.innerText = "Okay now you're just being difficult.";
+  }
+
+  noClicks++;
+
+  // Slight movement
+  noBtn.style.transform = `translate(${Math.random()*20 - 10}px, ${Math.random()*20 - 10}px)`;
+
+  // YES button grows slightly
+  yesBtn.style.transform = `scale(${1 + noClicks * 0.1})`;
 }
 
 function sayYes() {
-  document.getElementById("questionSection").style.display = "none";
-  document.getElementById("yesSection").style.display = "flex";
-  document.getElementById("yesSection").classList.add("show");
-}
-
-function moveButton(button) {
-  button.style.position = "absolute";
-  button.style.top = Math.random() * window.innerHeight + "px";
-  button.style.left = Math.random() * window.innerWidth + "px";
+  sections[current].classList.remove("active");
+  document.getElementById("yesSection").classList.add("active");
 }
 </script>
 
